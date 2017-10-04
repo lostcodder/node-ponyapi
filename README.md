@@ -1,6 +1,6 @@
 # Node PonyApi - Simple Node.js VK API Realisation
 ## Installation
-
+test
 ```
 npm install https://github.com/lostcodder/node-ponyapi
 ```
