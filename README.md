@@ -9,12 +9,14 @@ npm install https://github.com/lostcodder/node-ponyapi
 
 ```js
 var PonyApi = require('node-ponyapi')
-var bot = new PonyApi('Your api token')
+var bot = new PonyApi('Your Access Token')
 
+// Method that returns current user ID, first name and last name
 vk.api.users.get({}, (res) => {
     console.log(res);
 })
 
+// Emits a "message" event when some message received.
 bot.longPoll.on('message', (msg) => {
         console.log(msg);
 })
