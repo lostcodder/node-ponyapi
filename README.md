@@ -2,7 +2,7 @@
 ## Installation
 
 ```
-npm install node-ponyapi
+npm install https://github.com/lostcodder/node-ponyapi
 ```
 
 ## Usage
