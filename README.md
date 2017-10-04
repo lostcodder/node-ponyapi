@@ -23,6 +23,15 @@ bot.longPoll.on('message', (msg) => {
 ```
 
 
+## Table of contents
+
+- [API methods](#api-methods)
+- [LongPool events](#longpool-events)
+
+
+---
+
+
 ## API methods
 
 You can look for all available methods here - https://vk.com/dev/methods
