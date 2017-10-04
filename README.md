@@ -54,7 +54,7 @@ bot.longPoll.on('message', (msg) => {
 
 ### 'chat_invite_user'
 
-Message received.
+User entered chat.
 
 ```js
 bot.longPoll.on('chat_invite_user', (msg) => {
