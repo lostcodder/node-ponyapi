@@ -12,7 +12,7 @@ var PonyApi = require('node-ponyapi')
 var bot = new PonyApi('Your Access Token')
 
 // Method that returns current user ID, first name and last name
-vk.api.users.get({}, (res) => {
+bot.api.users.get({}, (res) => {
     console.log(res);
 })
 
