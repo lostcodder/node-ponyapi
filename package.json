@@ -1,0 +1,22 @@
+{
+  "name": "node-ponyapi",
+  "version": "0.0.1",
+  "description": "Simple node.js VK API realization https://vk.com/dev/methods",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lostcodder/node-ponyapi.git"
+  },
+  "author": "lostcodder",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lostcodder/node-ponyapi/issues"
+  },
+  "homepage": "https://github.com/lostcodder/node-ponyapi#readme",
+  "dependencies": {
+    "request": "^2.83.0"
+  }
+}
