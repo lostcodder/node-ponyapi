@@ -1,7 +1,7 @@
 {
   "name": "node-ponyapi",
   "version": "0.0.1",
-  "description": "Simple node.js VK API realization https://vk.com/dev/methods",
+  "description": "Simple Node.js VK API realization",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
