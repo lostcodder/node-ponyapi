@@ -78,7 +78,7 @@ bot.longPoll.on('chat_kick_user', (msg) => {
 
 ### 'chat_title_update'
 
-Chat name is changed
+Chat name changed
 
 ```js
 bot.longPoll.on('chat_title_update', (msg) => {
@@ -89,11 +89,22 @@ bot.longPoll.on('chat_title_update', (msg) => {
 
 ### 'chat_photo_update'
 
-Chat photo is changed
+Chat photo changed
 
 ```js
 bot.longPoll.on('chat_photo_update', (msg) => {
         console.log('Chat photo is changed');
+})
+```
+
+
+### 'chat_create'
+
+Chat created
+
+```js
+bot.longPoll.on('chat_create', (msg) => {
+        console.log('Chat is changed');
 })
 ```
 
