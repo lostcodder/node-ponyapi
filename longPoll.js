@@ -17,14 +17,8 @@ class LongPoll extends EventEmitter {
                         var msg = this.createMessage(item)
                         if (!msg.attachments.source_act) {
                             this.emit('message', msg)
-                        } else if (msg.attachments.source_act == 'chat_title_update') {
-                            this.emit('chat_title_update', msg)
-                        } else if (msg.attachments.source_act == 'chat_photo_update') {
-                            this.emit('chat_photo_update', msg)
-                        } else if (msg.attachments.source_act == 'chat_invite_user') {
-                            this.emit('chat_invite_user', msg);                        
-                        } else if (msg.attachments.source_act == 'chat_kick_user') {
-                            this.emit('chat_kick_user', msg);                        
+                        } else {
+                            this.emit(msg.attachments.source_act, msg)
                         }
                     }
                 })
