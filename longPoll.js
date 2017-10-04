@@ -18,7 +18,9 @@ class LongPoll extends EventEmitter {
                         if (!msg.attachments.source_act) {
                             this.emit('message', msg)
                         } else if (msg.attachments.source_act == 'chat_title_update') {
-                            this.emit('topic', msg)
+                            this.emit('chat_title_update', msg)
+                        } else if (msg.attachments.source_act == 'chat_photo_update') {
+                            this.emit('chat_photo_update', msg)
                         } else if (msg.attachments.source_act == 'chat_invite_user') {
                             this.emit('chat_invite_user', msg);                        
                         } else if (msg.attachments.source_act == 'chat_kick_user') {
