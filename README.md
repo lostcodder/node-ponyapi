@@ -1,4 +1,4 @@
-# Node PonyApi - Simple Node.js VK API Realisation
+# Node PonyApi - Simple Node.js VK API Realization
 ## Installation
 
 ```
