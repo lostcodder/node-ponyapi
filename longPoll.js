@@ -43,7 +43,13 @@ class LongPoll extends EventEmitter {
             isChat: () => {
                 if (msg.type == 'b') return true
                 else return false
-            }
+            },
+            reply: (text) => {
+                this.api.messages.send({peer_id: msg.peer_id, forward_messages: msg.id, message: text})
+            },
+            send: (text) => {
+                this.api.messages.send({peer_id: msg.peer_id, message: text})
+            },            
         };
         msg.chat_id = this.getChatId(msg.peer_id)
 
@@ -138,7 +144,6 @@ class LongPoll extends EventEmitter {
 
         return res.toString();
     }
-
 }
 
 module.exports = LongPoll

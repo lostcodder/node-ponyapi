@@ -15,11 +15,13 @@ function PonyApi (token) {
 
         request.post({url: url, form: p}, (error, response, body) => {
             try {
-                var res = JSON.parse(body)
-                if (res.error) {
-                    callback(null, res.error)
-                } else {
-                    callback(res.response, null)
+                if (callback) {
+                    var res = JSON.parse(body)
+                    if (res.error) {
+                        callback(null, res.error)
+                    } else {
+                        callback(res.response, null)
+                    }
                 }
             } catch(e) {
                 console.log('error, retraeng');
@@ -36,12 +38,23 @@ function PonyApi (token) {
     var f = new Proxy({},{get(target,name) {
           return function() {
             met = name
-            var p = arguments[0]
-            var cb = arguments[1]
+            if (arguments[1]) {
+                var p = arguments[0]
+                var cb = arguments[1]
+            } else {
+                if (typeof arguments[0] == 'function') {
+                    var p = {}
+                    var cb = arguments[0]
+                } else {
+                    var p = arguments[0]
+                    var cb = false
+                }
+            }
+
             var m = mod + '.' + met
 
             doPost(m, p, (res, err)=>{
-                cb(res, err)
+                if (cb) cb(res, err)
             })
           }
     }});
