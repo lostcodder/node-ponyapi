@@ -113,7 +113,7 @@ bot.on('chat_create', (msg) => {
 
 ## Messaging
 
-Object "msg" have two methodsfor send messages.
+Object "msg" have two methods for send messages.
 
 Reply method sends message with attaching original message:
 ```js
