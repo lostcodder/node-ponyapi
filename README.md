@@ -28,6 +28,7 @@ bot.on('message', (msg) => {
 
 - [API methods](#api-methods)
 - [LongPool events](#longpool-events)
+- [Messaging](#messaging)
 
 
 ---
@@ -109,3 +110,21 @@ bot.on('chat_create', (msg) => {
 })
 ```
 
+
+## Messaging
+
+Object "msg" have two methodsfor send messages.
+
+Reply method sends message with attaching original message:
+```js
+bot.on('message', (msg) => {
+    if (msg.text == 'test') msg.reply('passed')
+})
+```
+
+Send method just send message to peer of original message:
+```js
+bot.on('message', (msg) => {
+    if (msg.text == 'test') msg.send('passed')
+})
+```
