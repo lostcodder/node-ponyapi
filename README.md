@@ -12,12 +12,12 @@ var PonyApi = require('node-ponyapi')
 var bot = new PonyApi('Your Access Token')
 
 // Method that returns current user ID, first name and last name
-bot.api.users.get((res) => {
+bot.users.get((res) => {
     console.log(res);
 })
 
 // Emits a "message" event when some message received.
-bot.longPoll.on('message', (msg) => {
+bot.on('message', (msg) => {
         console.log(msg);
 })
 ```
@@ -45,7 +45,7 @@ You can look for all available methods here - https://vk.com/dev/methods
 Message received.
 
 ```js
-bot.longPoll.on('message', (msg) => {
+bot.on('message', (msg) => {
         console.log(`Received message with text: '${msg.text}'`);
 })
 ```
@@ -57,7 +57,7 @@ bot.longPoll.on('message', (msg) => {
 User entered chat.
 
 ```js
-bot.longPoll.on('chat_invite_user', (msg) => {
+bot.on('chat_invite_user', (msg) => {
         console.log(`User ${msg.attachments.source_mid} added to chat room`);
 })
 ```
@@ -69,7 +69,7 @@ bot.longPoll.on('chat_invite_user', (msg) => {
 User leave chat.
 
 ```js
-bot.longPoll.on('chat_kick_user', (msg) => {
+bot.on('chat_kick_user', (msg) => {
         console.log(`User ${msg.attachments.source_mid} leave a chat`);
 })
 ```
@@ -81,7 +81,7 @@ bot.longPoll.on('chat_kick_user', (msg) => {
 Chat name changed
 
 ```js
-bot.longPoll.on('chat_title_update', (msg) => {
+bot.on('chat_title_update', (msg) => {
         console.log(`Chat name is changed from "${msg.attachments.source_old_text}" to "${msg.attachments.source_text}"`);
 })
 ```
@@ -92,7 +92,7 @@ bot.longPoll.on('chat_title_update', (msg) => {
 Chat photo changed
 
 ```js
-bot.longPoll.on('chat_photo_update', (msg) => {
+bot.on('chat_photo_update', (msg) => {
         console.log('Chat photo is changed');
 })
 ```
@@ -103,7 +103,7 @@ bot.longPoll.on('chat_photo_update', (msg) => {
 Chat created
 
 ```js
-bot.longPoll.on('chat_create', (msg) => {
+bot.on('chat_create', (msg) => {
         console.log('Chat is changed');
 })
 ```
