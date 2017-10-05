@@ -92,7 +92,7 @@ Chat name changed
 
 ```js
 bot.on('chat_title_update', (msg) => {
-        console.log(`Chat name is changed from "${msg.attachments.source_old_text}" to "${msg.attachments.source_text}"`);
+        console.log(`Chat name is changed to "${msg.attachments.source_text}"`);
 })
 ```
 
