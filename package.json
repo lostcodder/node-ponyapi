@@ -10,6 +10,10 @@
     "type": "git",
     "url": "git+https://github.com/lostcodder/node-ponyapi.git"
   },
+  "engineStrict": true,
+  "engines" : { 
+    "node" : ">=7.0.0" 
+  },
   "author": "lostcodder",
   "license": "ISC",
   "bugs": {
