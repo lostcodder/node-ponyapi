@@ -1,5 +1,4 @@
 # Node PonyApi - Simple Node.js VK API Realization
-[![GitHub release](https://img.shields.io/github/release/qubyte/rubidium.svg)](https://github.com/lostcodder/node-ponyapi)
 ## Installation
 
 ```
