@@ -126,13 +126,15 @@ Object "msg" has two methods for send messages.
 Reply method sends message with attaching original message:
 ```js
 bot.on('message', (msg) => {
-    if (msg.text == 'test') msg.reply('passed')
+    if (msg.text == 'test') 
+        msg.reply('passed')
 })
 ```
 
 Send method just send message to peer of original message:
 ```js
 bot.on('message', (msg) => {
-    if (msg.text == 'test') msg.send('passed')
+    if (msg.text == 'test') 
+        msg.send('passed')
 })
 ```
