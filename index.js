@@ -59,19 +59,21 @@ function PonyApi (token) {
           }
     }});
 
-    var o = new Proxy({}, {
+    var api = new Proxy({}, {
       get(target, prop) {
         mod = prop
 
         return f
       }
     });
-
-    this.api = o
-
     
-    this.longPoll = new LongPoll(this.api)
-    this.longPoll.start()
+    var longPoll = new LongPoll(api)
+    this.on = (e, callback) =>{
+        longPoll.on(e, callback)
+    }
+
+    this.__proto__ = Object.create(api)
+    longPoll.start()
 }
 
 module.exports = PonyApi
