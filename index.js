@@ -1,16 +1,23 @@
 var request = require('request');
 var LongPoll = require('./longPoll.js')
 
-function PonyApi (token) {
+function PonyApi (token = false, p = {}) {
     this.access_token = token
-    this.params = {
-        retry_interval: 5
+    var defaults = {
+        retry_interval: 5,
+        start: true
     }
+
+    for (i in defaults) {
+        if (!p.hasOwnProperty(i)) p[i] = defaults[i]
+    }
+
+    this.params = p
 
     var doPost = (m, p, callback) => {
         var url = 'https://api.vk.com/method/'+ m;
 
-        p.access_token = this.access_token
+        if (this.access_token) p.access_token = this.access_token
         p.v = '5.60';
 
         request.post({url: url, form: p}, (error, response, body) => {
@@ -72,8 +79,12 @@ function PonyApi (token) {
         longPoll.on(e, callback)
     }
 
+    this.start = () => {
+        longPoll.start()
+    }
+
     this.__proto__ = Object.create(api)
-    longPoll.start()
+    if (this.params.start) longPoll.start()
 }
 
 module.exports = PonyApi
