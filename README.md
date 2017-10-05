@@ -1,5 +1,5 @@
 # Node PonyApi - Simple Node.js VK API Realization
-[![Travis](https://img.shields.io/travis/lostcodder/node-ponyapi.svg?style=flat-square)]() [![GitHub release](https://img.shields.io/github/release/lostcodder/node-ponyapi.svg?style=flat-square)]()
+[![Travis](https://img.shields.io/travis/lostcodder/node-ponyapi.svg?style=flat-square)](https://travis-ci.org/lostcodder/node-ponyapi) [![GitHub release](https://img.shields.io/github/release/lostcodder/node-ponyapi.svg?style=flat-square)](https://github.com/lostcodder/node-ponyapi/releases)
 ## Installation
 
 ```
