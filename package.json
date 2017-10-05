@@ -1,6 +1,6 @@
 {
   "name": "node-ponyapi",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "Simple Node.js VK API realization",
   "main": "index.js",
   "scripts": {
