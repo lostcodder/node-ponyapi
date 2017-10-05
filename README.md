@@ -36,7 +36,15 @@ bot.on('message', (msg) => {
 
 ## API methods
 
-You can look for all available methods here - https://vk.com/dev/methods
+You can use any available method from VK API.
+For example, this method returns users with IDs 1, 2, 3:
+```js
+bot.users.get({user_ids: '1,2,3'}, (res) => {
+    console.log(res);
+})
+```
+
+Look for another available methods here - https://vk.com/dev/methods
 
 
 
