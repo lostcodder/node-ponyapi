@@ -1,5 +1,6 @@
 var request = require('request');
 var LongPoll = require('./longPoll.js')
+var Upload = require('./upload.js')
 
 function PonyApi (token = false, p = {}) {
     this.access_token = token
@@ -18,24 +19,26 @@ function PonyApi (token = false, p = {}) {
         var url = 'https://api.vk.com/method/'+ m;
 
         if (this.access_token) p.access_token = this.access_token
-        p.v = '5.60';
+        p.v = '5.68';
 
         request.post({url: url, form: p}, (error, response, body) => {
             try {
                 if (callback) {
                     var res = JSON.parse(body)
-                    if (res.error) {
-                        callback(null, res.error)
-                    } else {
-                        callback(res.response, null)
-                    }
                 }
             } catch(e) {
+                console.log(e);
                 console.log('error, retraeng');
                 setTimeout(() => { 
                     doPost(m, p, callback)
                 }, this.params.retry_interval * 1000)  
             }
+                    if (res.error) {
+                        console.log(error);
+                        callback(null, res.error)
+                    } else {
+                        callback(res.response, null)
+                    }
         });
     }
 
@@ -75,6 +78,13 @@ function PonyApi (token = false, p = {}) {
     });
     
     var longPoll = new LongPoll(api)
+
+    this.upload = new Upload(api)
+
+    this.toPeer = (chat_id) => {
+        return 2000000000 + chat_id
+    }
+
     this.on = (e, callback) =>{
         longPoll.on(e, callback)
     }
