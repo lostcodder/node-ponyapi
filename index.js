@@ -17,8 +17,10 @@ function PonyApi (token = false, p = {}) {
 
     var doPost = (m, p, callback) => {
         var url = 'https://api.vk.com/method/'+ m;
-
-        if (this.access_token) p.access_token = this.access_token
+        if (p.access_token) this.access_token = p.access_token
+        else {
+            if (this.access_token) p.access_token = this.access_token
+        }
         p.v = '5.68';
 
         request.post({url: url, form: p}, (error, response, body) => {
@@ -33,13 +35,20 @@ function PonyApi (token = false, p = {}) {
                     doPost(m, p, callback)
                 }, this.params.retry_interval * 1000)  
             }
-                    if (res.error) {
-                        console.log(error);
-                        callback(null, res.error)
-                    } else {
-                        callback(res.response, null)
-                    }
+
+            if (res.error) {
+                callback(null, res.error)
+            } else {
+                if (res.response) callback(res.response, null)
+                else callback(res.response, null)
+            }
         });
+    }
+
+    this.doPost = (m, p, callback) => {
+        doPost(m, p, (res, err)=>{
+            callback(res, err)
+        })
     }
 
     var mod

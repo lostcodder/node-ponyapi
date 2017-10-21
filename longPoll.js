@@ -10,25 +10,36 @@ class LongPoll extends EventEmitter {
     }
   }   
   start () {
-        this.getUpdates((updates) => {
-            if (updates) {
-                updates.forEach((item, i, arr) => {
-                    if ((item[0] == 4) && (!(item[2]&2))) {
-                        var msg = this.createMessage(item)
-                        if (!msg.attachments.source_act) {
-                            this.emit('message', msg)
-                        } else {
-                            this.emit(msg.attachments.source_act, msg)
+        this.api.users.get((u)=>{
+            this.user = u[0].id
+            this.getUpdates((updates) => {
+                if (updates) {
+                    updates.forEach((item, i, arr) => {
+                        if ((item[0] == 4) && (!(item[2]&2))) {
+                            var msg = this.createMessage(item)
+                            if (!msg.attachments.source_act) {
+                                this.emit('message', msg)
+                            } else {
+                                this.emit(msg.attachments.source_act, msg)
+                            }
                         }
-                    }
-                })
-            }
+                    })
+                }
+            })
         })
     }
 
     createMessage(data) {
         if (data[7].from && data[7].fwd) {
             var fwd = this.splitFwd(data[7].fwd);
+        }
+
+        var reply = (text) => {
+            this.api.messages.send({peer_id: msg.peer_id, forward_messages: msg.id, message: text})
+        }
+
+        var send = (text) => {
+            this.api.messages.send({peer_id: msg.peer_id, message: text})
         }
 
         var msg = {
@@ -44,12 +55,8 @@ class LongPoll extends EventEmitter {
                 if (msg.type == 'b') return true
                 else return false
             },
-            reply: (text) => {
-                this.api.messages.send({peer_id: msg.peer_id, forward_messages: msg.id, message: text})
-            },
-            send: (text) => {
-                this.api.messages.send({peer_id: msg.peer_id, message: text})
-            },            
+            reply: reply,
+            send: send,            
         };
         msg.chat_id = this.getChatId(msg.peer_id)
 
@@ -75,7 +82,8 @@ class LongPoll extends EventEmitter {
         
             var arr = res.split('_');
             res = {to_id: arr[0], message_id: arr[1]}
-            if (parseInt(res.to_id) == this.user) {
+            
+            if (res.to_id == this.user) {
                 return res;
             }
         }
