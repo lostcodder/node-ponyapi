@@ -1,6 +1,8 @@
 var request = require('request');
 var LongPoll = require('./longPoll.js')
 var Upload = require('./upload.js')
+var Antigate = require('antigate');
+var ag = new Antigate('bc557b2f0e211930e17c8736dd5751fa');
 
 function PonyApi (token = false, p = {}) {
     this.access_token = token
@@ -14,6 +16,14 @@ function PonyApi (token = false, p = {}) {
     }
 
     this.params = p
+    var getCaptcha = function (url, callback) {
+        ag.processFromURL(url, function(error, text, id) {
+          if (error) {
+          } else {
+            callback (text)
+          }
+        });
+    }
 
     var doPost = (m, p, callback) => {
         var url = 'https://api.vk.com/method/'+ m;
@@ -37,7 +47,16 @@ function PonyApi (token = false, p = {}) {
             }
 
             if (res.error) {
-                callback(null, res.error)
+                if (res.error.error_code == 14) {
+                    getCaptcha(res.error.captcha_img, (key) =>  {
+                        p.captcha_sid = res.error.captcha_sid
+                        p.captcha_key = key
+                        doPost(m, p, callback)
+                    })
+                } else {
+                    callback(null, res.error)
+                }
+                
             } else {
                 if (res.response) callback(res.response, null)
                 else callback(res.response, null)
