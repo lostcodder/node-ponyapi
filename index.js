@@ -36,31 +36,32 @@ function PonyApi (token = false, p = {}) {
         request.post({url: url, form: p}, (error, response, body) => {
             try {
                 if (callback) {
-                    var res = JSON.parse(body)
-                }
+	                var res = JSON.parse(body)
+
+		            if (res.error) {
+		                if (res.error.error_code == 14) {
+		                    getCaptcha(res.error.captcha_img, (key) =>  {
+		                        p.captcha_sid = res.error.captcha_sid
+		                        p.captcha_key = key
+		                        doPost(m, p, callback)
+		                    })
+		                } else {
+		                    callback(null, res.error)
+		                }
+		                
+		            } else {
+		                if (res.response) callback(res.response, null)
+		                else callback(res.response, null)
+		            }
+		    	}
             } catch(e) {
-                console.log(e);
-                console.log('error, retraeng');
+
                 setTimeout(() => { 
                     doPost(m, p, callback)
                 }, this.params.retry_interval * 1000)  
             }
 
-            if (res.error) {
-                if (res.error.error_code == 14) {
-                    getCaptcha(res.error.captcha_img, (key) =>  {
-                        p.captcha_sid = res.error.captcha_sid
-                        p.captcha_key = key
-                        doPost(m, p, callback)
-                    })
-                } else {
-                    callback(null, res.error)
-                }
-                
-            } else {
-                if (res.response) callback(res.response, null)
-                else callback(res.response, null)
-            }
+
         });
     }
 

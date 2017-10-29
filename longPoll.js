@@ -5,6 +5,7 @@ class LongPoll extends EventEmitter {
   constructor(api) {
     super()
     this.api = api
+    this.started = false
     this.params = {
         retry_interval: 5
     }
@@ -12,6 +13,7 @@ class LongPoll extends EventEmitter {
   start () {
         this.api.users.get((u)=>{
             this.user = u[0].id
+            
             this.getUpdates((updates) => {
                 if (updates) {
                     updates.forEach((item, i, arr) => {
@@ -34,20 +36,12 @@ class LongPoll extends EventEmitter {
             var fwd = this.splitFwd(data[7].fwd);
         }
 
-        var reply = (text) => {
-            this.api.messages.send({peer_id: msg.peer_id, forward_messages: msg.id, message: text})
-        }
-
-        var send = (text) => {
-            this.api.messages.send({peer_id: msg.peer_id, message: text})
-        }
-
         var msg = {
             id: data[1],
             peer_id: data[3],
             timestamp: data[4],
             subject: data[5],
-            text: data[6].trim().replace(new RegExp('&quot;','g'),'"').replace(new RegExp('&quot;','g'),'"'),
+            text: data[6].trim().replace(new RegExp('&quot;','g'),'"').replace(new RegExp('&quot;','g'),'"').replace(new RegExp('<br>','g'),'\n\r'),
             type: (data[7].from) ? 'b' : 'm',
             from: (data[7].from) ? data[7].from : data[3],
             fwd: (fwd) ? fwd : false,
@@ -55,8 +49,15 @@ class LongPoll extends EventEmitter {
                 if (msg.type == 'b') return true
                 else return false
             },
-            reply: reply,
-            send: send,            
+            reply: (text, callback) => {
+                this.api.messages.send({peer_id: msg.peer_id, forward_messages: msg.id, message: text}, callback)
+            },
+            send: (text, callback) => {
+                this.api.messages.send({peer_id: msg.peer_id, message: text}, callback)
+            },     
+            sendPvt: (text, callback) => {
+                this.api.messages.send({peer_id: msg.from, message: text}, callback)
+            },       
         };
         msg.chat_id = this.getChatId(msg.peer_id)
 
@@ -100,6 +101,10 @@ class LongPoll extends EventEmitter {
     }
 
     pollQuery (callback) {
+        if (!this.started) {
+            this.started = true
+            this.emit('start', this.user)
+        }
         this.pollRequest((res) => {
             callback(res);
             this.pollQuery(callback);
