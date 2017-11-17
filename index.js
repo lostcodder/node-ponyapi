@@ -11,6 +11,8 @@ function PonyApi (token = false, p = {}) {
         start: true
     }
 
+    if (p.headers) this.headers = p.headers
+
     for (i in defaults) {
         if (!p.hasOwnProperty(i)) p[i] = defaults[i]
     }
@@ -32,8 +34,11 @@ function PonyApi (token = false, p = {}) {
             if (this.access_token) p.access_token = this.access_token
         }
         p.v = '5.68';
+        var options = {url: url, form: p}
 
-        request.post({url: url, form: p}, (error, response, body) => {
+        if (this.headers) options.headers = this.headers
+        request.post(options, (error, response, body) => {
+            if (error) console.log(error)
             try {
                 if (callback) {
 	                var res = JSON.parse(body)

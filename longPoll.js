@@ -13,7 +13,6 @@ class LongPoll extends EventEmitter {
   start () {
         this.api.users.get((u)=>{
             this.user = u[0].id
-            
             this.getUpdates((updates) => {
                 if (updates) {
                     updates.forEach((item, i, arr) => {
@@ -113,7 +112,9 @@ class LongPoll extends EventEmitter {
 
     pollRequest (callback) {
         var url = `https://${this.server.server}?act=a_check&key=${this.server.key}&ts=${this.server.ts}&wait=25&mode=2&version=1`;
-        request(url, (error, response, res) => { 
+        var o = {url: url}
+        if (this.api.headers) o.headers = this.api.headers
+        request(o, (error, response, res) => { 
             if (!error) {
                 try {
                     res = JSON.parse(res);
@@ -143,6 +144,7 @@ class LongPoll extends EventEmitter {
                 }
             }
             else {
+                console.log(error)
                 setTimeout(() => { 
                     this.getServer(() => {
                         this.pollRequest(callback);
