@@ -35,7 +35,7 @@ function PonyApi (token = false, p = {}) {
 
         if (this.headers) options.headers = this.headers
         request.post(options, (error, response, body) => {
-            if (error) console.log(error)
+            if (error) logger.warning(error)
             try {
                 if (callback) {
 	                var res = JSON.parse(body)

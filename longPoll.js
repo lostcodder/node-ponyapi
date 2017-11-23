@@ -121,7 +121,6 @@ class LongPoll extends EventEmitter {
                     this.server.ts = res.ts
                 }
                 catch (e) {
-                    console.log('pollRequest fail r');
                     setTimeout(() => { 
                         this.getServer(() => {
                             this.pollRequest(callback);
@@ -144,7 +143,6 @@ class LongPoll extends EventEmitter {
                 }
             }
             else {
-                console.log(error)
                 setTimeout(() => { 
                     this.getServer(() => {
                         this.pollRequest(callback);

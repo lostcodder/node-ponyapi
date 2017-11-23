@@ -12,8 +12,6 @@ class Upload {
             var uploadUrl = res.upload_url
 
             this.uploadFile(uploadUrl, 'file', file, (resp) => {
-            console.log(resp);
-
                 this.api.messages.setChatPhoto({file: resp.response}, (r, e) => {
                     if (callback) callback(r)
                 })
@@ -56,7 +54,6 @@ class Upload {
     messagesPhoto(peer_id, files, callback) {
         this.api.photos.getMessagesUploadServer({peer_id: peer_id}, (res, err) => {
             var uploadUrl = res.upload_url
-            console.log(uploadUrl);
             this.uploadMessagesPhotos(peer_id, files, uploadUrl, (r)=>{
                 callback(r)
             })
