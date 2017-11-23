@@ -42,7 +42,7 @@ class LongPoll extends EventEmitter {
             subject: data[5],
             text: data[6].trim().replace(new RegExp('&quot;','g'),'"').replace(new RegExp('&quot;','g'),'"').replace(new RegExp('<br>','g'),'\n\r'),
             type: (data[7].from) ? 'b' : 'm',
-            from: (data[7].from) ? data[7].from : data[3],
+            from: (data[7].from) ? data[7].from : data[3].toString(),
             fwd: (fwd) ? fwd : false,
             isChat: () => {
                 if (msg.type == 'b') return true
