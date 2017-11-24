@@ -49,7 +49,8 @@ class LongPoll extends EventEmitter {
                 else return false
             },
             reply: (text, callback) => {
-                this.api.messages.send({peer_id: msg.peer_id, forward_messages: msg.id, message: text}, callback)
+                if (msg.isChat()) this.api.messages.send({peer_id: msg.peer_id, forward_messages: msg.id, message: text}, callback)
+                else msg.sendPvt(text, callback)
             },
             send: (text, callback) => {
                 this.api.messages.send({peer_id: msg.peer_id, message: text}, callback)
