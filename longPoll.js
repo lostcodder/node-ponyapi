@@ -15,7 +15,7 @@ class LongPoll extends EventEmitter {
             this.user = u[0].id
             this.getUpdates((updates) => {
                 if (updates) {
-                    updates.forEach((item, i, arr) => {
+                    updates.forEach((item) => {
                         if ((item[0] == 4) && (!(item[2]&2))) {
                             var msg = this.createMessage(item)
                             if (!msg.attachments.source_act) {
@@ -108,7 +108,7 @@ class LongPoll extends EventEmitter {
             callback(res);
             this.pollQuery(callback);
         });
-    };
+    }
 
     pollRequest (callback) {
         var url = `https://${this.server.server}?act=a_check&key=${this.server.key}&ts=${this.server.ts}&wait=25&mode=2&version=1`;

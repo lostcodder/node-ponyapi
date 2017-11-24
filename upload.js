@@ -8,11 +8,11 @@ class Upload {
     }
 
     chatPhoto(chat_id, file, callback) {
-        this.api.photos.getChatUploadServer({chat_id: chat_id}, (res, err) => {
+        this.api.photos.getChatUploadServer({chat_id: chat_id}, (res) => {
             var uploadUrl = res.upload_url
 
             this.uploadFile(uploadUrl, 'file', file, (resp) => {
-                this.api.messages.setChatPhoto({file: resp.response}, (r, e) => {
+                this.api.messages.setChatPhoto({file: resp.response}, (r) => {
                     if (callback) callback(r)
                 })
             })
@@ -20,11 +20,11 @@ class Upload {
     }
 
     ownerCoverPhoto(group_id, file, callback) {
-        this.api.photos.getOwnerCoverPhotoUploadServer({group_id: group_id}, (res, err) => {
+        this.api.photos.getOwnerCoverPhotoUploadServer({group_id: group_id}, (res) => {
             var uploadUrl = res.upload_url
 
             this.uploadFile(uploadUrl, 'photo', file, (resp) => {
-                this.api.photos.saveOwnerCoverPhoto({hash: resp.hash, photo: resp.photo}, (r, e) => {
+                this.api.photos.saveOwnerCoverPhoto({hash: resp.hash, photo: resp.photo}, (r) => {
                     if (callback) callback(r)
                 })
             })
@@ -32,7 +32,7 @@ class Upload {
     }
 
     messagesPhoto2(peer_id, data, callback) {
-        this.api.photos.getMessagesUploadServer({peer_id: peer_id}, (res, err) => {
+        this.api.photos.getMessagesUploadServer({peer_id: peer_id}, (res) => {
             var uploadUrl = res.upload_url
             var formData = {
                 photo: {
@@ -44,7 +44,7 @@ class Upload {
             }
             
             this.uploadFile(uploadUrl, formData, data, (resp) => {
-                this.api.photos.saveMessagesPhoto({photo: resp.photo, server: resp.server, hash: resp.hash}, (r, e) => {
+                this.api.photos.saveMessagesPhoto({photo: resp.photo, server: resp.server, hash: resp.hash}, (r) => {
                     if (callback) callback(r)
                 })
             })
@@ -52,7 +52,7 @@ class Upload {
     }
 
     messagesPhoto(peer_id, files, callback) {
-        this.api.photos.getMessagesUploadServer({peer_id: peer_id}, (res, err) => {
+        this.api.photos.getMessagesUploadServer({peer_id: peer_id}, (res) => {
             var uploadUrl = res.upload_url
             this.uploadMessagesPhotos(peer_id, files, uploadUrl, (r)=>{
                 callback(r)
@@ -62,7 +62,7 @@ class Upload {
 
     uploadMessagesPhoto(peer_id, files, uploadUrl, callback) {
         this.uploadFile(uploadUrl, 'photo', files, (resp) => {
-            this.api.photos.saveMessagesPhoto({photo: resp.photo, server: resp.server, hash: resp.hash}, (r, e) => {
+            this.api.photos.saveMessagesPhoto({photo: resp.photo, server: resp.server, hash: resp.hash}, (r) => {
                 if (callback) callback(r)
             })
         })
@@ -93,7 +93,7 @@ class Upload {
 
     getFiles(f) {
         var r = []
-        f.forEach((item, i)=>{
+        f.forEach((item)=>{
             var name = path.basename(item)
             var data = fs.readFileSync(item);
             r.push({name: name, data: data})
