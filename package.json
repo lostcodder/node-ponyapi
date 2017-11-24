@@ -1,23 +1,53 @@
 {
-  "name": "node-ponyapi",
-  "version": "0.0.8",
-  "description": "Simple Node.js VK API realization",
-  "main": "index.js",
-  "scripts": {
-    "test": "node test.js"
+  "_args": [
+    [
+      "node-ponyapi@0.0.8",
+      "C:\\Users\\lostc\\robopony"
+    ]
+  ],
+  "_from": "node-ponyapi@0.0.8",
+  "_id": "node-ponyapi@0.0.8",
+  "_inBundle": false,
+  "_integrity": "sha512-odingUvprRy8abzg3w5X2BUViUFH/eiLbWiWKFEtGgrZKS+/+1mig1Oi3bU5XfIrz7QAIXHYBvVZ6xUWpUIBCw==",
+  "_location": "/node-ponyapi",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "node-ponyapi@0.0.8",
+    "name": "node-ponyapi",
+    "escapedName": "node-ponyapi",
+    "rawSpec": "0.0.8",
+    "saveSpec": null,
+    "fetchSpec": "0.0.8"
   },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/node-ponyapi/-/node-ponyapi-0.0.8.tgz",
+  "_spec": "0.0.8",
+  "_where": "C:\\Users\\lostc\\robopony",
+  "author": {
+    "name": "lostcodder"
+  },
+  "bugs": {
+    "url": "https://github.com/lostcodder/node-ponyapi/issues"
+  },
+  "dependencies": {
+    "antigate": "0.0.1",
+    "request": "^2.83.0"
+  },
+  "description": "Simple Node.js VK API realization",
+  "homepage": "https://github.com/lostcodder/node-ponyapi#readme",
+  "license": "ISC",
+  "main": "index.js",
+  "name": "node-ponyapi",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lostcodder/node-ponyapi.git"
   },
-  "author": "lostcodder",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/lostcodder/node-ponyapi/issues"
+  "scripts": {
+    "test": "node test.js"
   },
-  "homepage": "https://github.com/lostcodder/node-ponyapi#readme",
-  "dependencies": {
-    "antigate": "0.0.1",
-    "request": "^2.83.0"
-  }
+  "version": "0.0.8"
 }
