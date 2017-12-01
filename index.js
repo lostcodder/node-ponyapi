@@ -32,7 +32,6 @@ function PonyApi (token = false, p = {}) {
         if (!p.access_token) p.access_token = this.access_token
         p.v = '5.68';
         var options = {url: url, form: p}
-
         if (this.headers) options.headers = this.headers
         request.post(options, (error, response, body) => {
             if (error) logger.warning(error)
