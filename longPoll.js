@@ -10,9 +10,11 @@ class LongPoll extends EventEmitter {
         retry_interval: 5
     }
   }   
+
   start () {
         this.api.users.get((u)=>{
             this.user = u[0].id
+            this.emit('start', u)
             this.getUpdates((updates) => {
                 if (updates) {
                     updates.forEach((item, i, arr) => {
