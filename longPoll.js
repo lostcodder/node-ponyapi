@@ -19,12 +19,13 @@ class LongPoll extends EventEmitter {
                 if (updates) {
                     updates.forEach((item, i, arr) => {
                         if ((item[0] == 4) && (!(item[2]&2))) {
-                            var msg = this.createMessage(item)
-                            if (!msg.attachments.source_act) {
-                                this.emit('message', msg)
-                            } else {
-                                this.emit(msg.attachments.source_act, msg)
-                            }
+                            this.createMessage(item, (msg)=>{
+                                if (!msg.attachments.source_act) {
+                                    this.emit('message', msg)
+                                } else {
+                                    this.emit(msg.attachments.source_act, msg)
+                                }
+                            })
                         }
                     })
                 }
@@ -32,10 +33,10 @@ class LongPoll extends EventEmitter {
         })
     }
 
-    createMessage(data) {
-        if (data[7].from && data[7].fwd) {
+    createMessage(data, callback) {
+/*        if (data[7].from && data[7].fwd) {
             var fwd = this.splitFwd(data[7].fwd);
-        }
+        }*/
 
         var msg = {
             id: data[1],
@@ -45,7 +46,7 @@ class LongPoll extends EventEmitter {
             text: data[6].trim().replace(new RegExp('&quot;','g'),'"').replace(new RegExp('&quot;','g'),'"').replace(new RegExp('<br>','g'),'\n\r'),
             type: (data[7].from) ? 'b' : 'm',
             from: (data[7].from) ? data[7].from : data[3].toString(),
-            fwd: (fwd) ? fwd : false,
+            fwd: false,
             isChat: () => {
                 if (msg.type == 'b') return true
                 else return false
@@ -66,7 +67,21 @@ class LongPoll extends EventEmitter {
         if (data[7]) {
             msg.attachments = data[7]
         }
-        return msg  
+
+        if (data[7].from && data[7].fwd) {
+            api.messages.getById({message_ids: msg.id}, (res)=>{
+                var fwd = res.items[0].fwd_messages
+                if (fwd[0].user_id == this.user) {
+                    msg.fwd = {to_id: fwd[0].user_id, message_id: false}
+                }
+                
+                callback(msg)
+            })
+        } else {
+            callback(msg)
+        }
+
+        //return msg  
     }
 
     getServer (callback) {
