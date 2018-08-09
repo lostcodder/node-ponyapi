@@ -47,41 +47,66 @@ class LongPoll extends EventEmitter {
             type: (data[7].from) ? 'b' : 'm',
             from: (data[7].from) ? data[7].from : data[3].toString(),
             fwd: false,
+            att: null,
             isChat: () => {
                 if (msg.type == 'b') return true
                 else return false
             },
             reply: (text, callback) => {
-                if (msg.isChat()) this.api.messages.send({peer_id: msg.peer_id, forward_messages: msg.id, message: text}, callback)
+                if (msg.isChat()) this.api.messages.send({peer_id: msg.peer_id, forward_messages: msg.id, message: text, attachment: msg.att}, callback)
                 else msg.sendPvt(text, callback)
             },
             send: (text, callback) => {
-                this.api.messages.send({peer_id: msg.peer_id, message: text}, callback)
+                this.api.messages.send({peer_id: msg.peer_id, message: text, attachment: msg.att}, callback)
             },     
             sendPvt: (text, callback) => {
-                this.api.messages.send({peer_id: msg.from, message: text}, callback)
+                this.api.messages.send({peer_id: msg.from, message: text, attachment: msg.att}, callback)
             }       
         };
         msg.chat_id = this.getChatId(msg.peer_id)
 
+        msg.getPhotos = () => {
+            return false
+        }
+
         if (data[7]) {
             msg.attachments = data[7]
-        }
+            //var atts = this.getAttachments(msg)
+            api.messages.getById({message_ids: msg.id}, (fullMsg)=>{
+                msg.getPhotos = () => {
+                    var item = fullMsg.items[0]
+                    var atts = (item.attachments) ? item.attachments : []
+                    var res = []
+                    for (var i=0; i< atts.length; i++){
+                        var type = atts[i].type
 
-        if (data[7].from && data[7].fwd) {
-            api.messages.getById({message_ids: msg.id}, (res)=>{
-                var fwd = res.items[0].fwd_messages
-                if (fwd[0].user_id == this.user) {
-                    msg.fwd = {to_id: fwd[0].user_id, message_id: false}
+/*                        if (type == 'photo'){
+                            var p = atts[i].photo
+                        } else if (type == 'audio'){
+                            var p = atts[i].audio
+                        }*/
+
+                        var p = atts[i][type]
+
+                        var attach = `${type}${p.owner_id}_${p.id}`
+                        if (p.access_key) attach += '_' + p.access_key
+                        res.push(attach)
+                    }
+
+                    return res
                 }
-                
-                callback(msg)
-            })
-        } else {
-            callback(msg)
-        }
 
-        //return msg  
+                if (data[7].from && data[7].fwd) {
+                    var fwd = fullMsg.items[0].fwd_messages
+                    if (fwd[0].user_id == this.user) {
+                        msg.fwd = {to_id: fwd[0].user_id, message_id: false}
+                    }
+                    callback(msg)
+                } else {
+                    callback(msg)
+                }
+            })
+        }
     }
 
     getServer (callback) {
@@ -89,6 +114,22 @@ class LongPoll extends EventEmitter {
             this.server = res;
             callback(res);
         });
+    }
+
+    getAttachments(msg) {
+        var att = msg.attachments
+        var res = []
+        var i = 1
+        for (var n in att){
+            if (n == "attach"+i+"_type"){
+                var type = att[n]
+                var data = att["attach"+i]
+                res.push({type: type, data: data})
+                i++
+            }
+        }
+
+        return res
     }
 
     splitFwd (str) {
