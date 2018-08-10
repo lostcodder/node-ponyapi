@@ -76,6 +76,7 @@ class LongPoll extends EventEmitter {
                 msg.getPhotos = () => {
                     var item = fullMsg.items[0]
                     var atts = (item.attachments) ? item.attachments : []
+                    
                     var res = []
                     for (var i=0; i< atts.length; i++){
                         var type = atts[i].type
@@ -92,7 +93,6 @@ class LongPoll extends EventEmitter {
                         if (p.access_key) attach += '_' + p.access_key
                         res.push(attach)
                     }
-
                     return res
                 }
 
