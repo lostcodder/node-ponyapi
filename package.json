@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "antigate": "0.0.1",
-    "request": "^2.83.0"
+    "request": "^2.88.0"
   },
   "description": "Simple Node.js VK API realization",
   "homepage": "https://github.com/lostcodder/node-ponyapi#readme",
