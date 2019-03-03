@@ -30,7 +30,7 @@ function PonyApi (token = false, p = {}) {
 	var doPost = (m, p, callback) => {
 		var url = 'https://api.vk.com/method/'+ m;
 		if (!p.access_token) p.access_token = this.access_token
-		p.v = '5.68';
+		p.v = '5.92';
 		var options = {url: url, form: p}
 		if (this.headers) options.headers = this.headers
 		request.post(options, (error, response, body) => {

@@ -12,55 +12,62 @@ class LongPoll extends EventEmitter {
   }   
 
   start () {
-        this.api.users.get((u)=>{
-            this.user = u[0].id
-            this.emit('start', u)
+        this.api.groups.get((u)=>{
+            this.user = 173005038
+            this.emit('start')
             this.getUpdates((updates) => {
                 if (updates) {
                     updates.forEach((item, i, arr) => {
-                        if ((item[0] == 4) && (!(item[2]&2))) {
-                            this.createMessage(item, (msg)=>{
-                                if (!msg.attachments.source_act) {
+                        //if ((item[0] == 4) && (!(item[2]&2))) {
+                            this.createMessage(item.object, (msg)=>{
+                                //if (!msg.attachments.source_act) {
                                     this.emit('message', msg)
-                                } else {
-                                    this.emit(msg.attachments.source_act, msg)
-                                }
+                                //} else {
+                                //    this.emit(msg.attachments.source_act, msg)
+                                //}
                             })
-                        }
+                        //}
                     })
                 }
             })
         })
     }
 
-    createMessage(data, callback) {
+    createMessage(data, callback) {        
 /*        if (data[7].from && data[7].fwd) {
             var fwd = this.splitFwd(data[7].fwd);
         }*/
 
         var msg = {
-            id: data[1],
-            peer_id: data[3],
-            timestamp: data[4],
-            subject: data[5],
-            text: data[6].trim().replace(new RegExp('&quot;','g'),'"').replace(new RegExp('&quot;','g'),'"').replace(new RegExp('<br>','g'),'\n\r'),
-            type: (data[7].from) ? 'b' : 'm',
-            from: (data[7].from) ? data[7].from : data[3].toString(),
+            id: data.conversation_message_id,
+            peer_id: data.peer_id,
+            timestamp: data.date,
+            subject: null,
+            text: data.text.trim().replace(new RegExp('&quot;','g'),'"').replace(new RegExp('&quot;','g'),'"').replace(new RegExp('<br>','g'),'\n\r'),
+            type: 'b',
+            from: data.from_id.toString(),
             fwd: false,
-            att: null,
+            notice: false,
             isChat: () => {
-                if (msg.type == 'b') return true
-                else return false
+                return true
             },
             reply: (text, callback) => {
-                if (msg.isChat()) this.api.messages.send({peer_id: msg.peer_id, forward_messages: msg.id, message: text, attachment: msg.att}, callback)
-                else msg.sendPvt(text, callback)
+                if(msg.user){
+                    text = `${msg.user.name.split(' ')[0]}, ${text}`
+                }
+                this.api.messages.send({peer_id: msg.peer_id, message: text, random_id: getRandomInt(10000, 99999)}, ()=>{
+                    if (callback) callback()
+                })
             },
             send: (text, callback) => {
-                this.api.messages.send({peer_id: msg.peer_id, message: text, attachment: msg.att}, callback)
+                this.api.messages.send({peer_id: msg.peer_id, message: text, random_id: getRandomInt(10000, 99999)}, ()=>{
+                    if (callback) callback()
+                })
             },     
             sendPvt: (text, callback) => {
-                this.api.messages.send({peer_id: msg.from, message: text, attachment: msg.att}, callback)
+                this.api.messages.send({peer_id: msg.from, message: text, random_id: getRandomInt(10000, 99999)}, ()=>{
+                    if (callback) callback()
+                })
             }       
         };
         msg.chat_id = this.getChatId(msg.peer_id)
@@ -68,49 +75,14 @@ class LongPoll extends EventEmitter {
         msg.getPhotos = () => {
             return false
         }
-
-        if (data[7]) {
-            msg.attachments = data[7]
-            //var atts = this.getAttachments(msg)
-            api.messages.getById({message_ids: msg.id}, (fullMsg)=>{
-                msg.getPhotos = () => {
-                    var item = fullMsg.items[0]
-                    var atts = (item.attachments) ? item.attachments : []
-                    
-                    var res = []
-                    for (var i=0; i< atts.length; i++){
-                        var type = atts[i].type
-
-/*                        if (type == 'photo'){
-                            var p = atts[i].photo
-                        } else if (type == 'audio'){
-                            var p = atts[i].audio
-                        }*/
-
-                        var p = atts[i][type]
-
-                        var attach = `${type}${p.owner_id}_${p.id}`
-                        if (p.access_key) attach += '_' + p.access_key
-                        res.push(attach)
-                    }
-                    return res
-                }
-
-                if (data[7].from && data[7].fwd) {
-                    var fwd = fullMsg.items[0].fwd_messages
-                    if (fwd[0].user_id == this.user) {
-                        msg.fwd = {to_id: fwd[0].user_id, message_id: false}
-                    }
-                    callback(msg)
-                } else {
-                    callback(msg)
-                }
-            })
-        }
+        callback(msg)
+        //console.log(msg)
+/*  */
     }
 
     getServer (callback) {
-        this.api.messages.getLongPollServer({}, (res, err) => {
+        this.api.groups.getLongPollServer({group_id: 173005038}, (res, err) => {
+            
             this.server = res;
             callback(res);
         });
@@ -170,7 +142,7 @@ class LongPoll extends EventEmitter {
     };
 
     pollRequest (callback) {
-        var url = `https://${this.server.server}?act=a_check&key=${this.server.key}&ts=${this.server.ts}&wait=25&mode=2&version=1`;
+        var url = `${this.server.server}?act=a_check&key=${this.server.key}&ts=${this.server.ts}&wait=25`;
         var o = {url: url}
         if (this.api.headers) o.headers = this.api.headers
         request(o, (error, response, res) => { 
@@ -217,5 +189,9 @@ class LongPoll extends EventEmitter {
         return res.toString();
     }
 }
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
 
 module.exports = LongPoll
